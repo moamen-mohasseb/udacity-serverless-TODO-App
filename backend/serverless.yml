@@ -27,7 +27,7 @@ provider:
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
     ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-moamen-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-
+    AUTH_SECRET: XcL0IzlUtC0XIEejflD2-rZHQIOFnK5AG9eGM9FBv1G9OstdWM10njqIuatRrJQj
   logs:
     # Enable API Gateway logs
     restApi: true
