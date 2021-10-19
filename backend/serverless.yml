@@ -78,7 +78,7 @@ functions:
           request:
             schemas:
               application/json: ${file(models/create-todo-model.json)}
-     iamRoleStatements:
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
@@ -193,7 +193,7 @@ resources:
     # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"
     BucketPolicy:
        Type: AWS::S3::BucketPolicy
-      Properties:
+       Properties:
         PolicyDocument:
           Id: MyPolicy
           Version: "2012-10-17"

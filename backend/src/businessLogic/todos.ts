@@ -11,7 +11,7 @@ const CREATED_AT_INDEX = process.env.TODOS_CREATED_AT_INDEX
 const s3 = new XAWS.S3({
     signatureVersion: "v4",
   })
-) {}
+ {}
 export async function createTodo(
     newItem:TodoItem ):Promise<TodoItem> {
         await docClient.put({
@@ -24,7 +24,7 @@ export async function createTodo(
     todoId: String,
     userId: String
   ): Promise<void> {
-    await docClient.delete(
+    await this.docClient.delete(
         {
           TableName: Tabel_Name,
           Key: {
@@ -64,7 +64,7 @@ export async function createAttachmentPresignedUrl(
     const allItems = docClient
     .query({
       TableName: Tabel_Name,
-      CratedAt: CREATED_AT_INDEX,
+      IndexName: CREATED_AT_INDEX,
       KeyConditionExpression: "userId = :userId",
       ExpressionAttributeValues: {
         ":userId": userId,
@@ -78,7 +78,7 @@ export async function updateTodo(  todoId: String,
     updatedTodo: UpdateTodoRequest,
     userId: String
   ): Promise<void>{
-    docClient.update(
+    this.docClient.update(
         {
           TableName: Tabel_Name,
           Key: {
