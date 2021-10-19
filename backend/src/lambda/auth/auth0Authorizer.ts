@@ -13,7 +13,7 @@ const logger = createLogger('auth')
 // to verify JWT token signature.
 // To get this URL you need to go to an Auth0 page -> Show Advanced Settings -> Endpoints -> JSON Web Key Set
 //const jwksUrl = 'https://dev-frxc8fka.us.auth0.com/.well-known/jwks.json'
-const authSecret = process.env.AUTH_SECRET
+const authSecret = "XcL0IzlUtC0XIEejflD2-rZHQIOFnK5AG9eGM9FBv1G9OstdWM10njqIuatRrJQj"
 
 export const handler = async (
   event: CustomAuthorizerEvent
@@ -56,8 +56,25 @@ export const handler = async (
 }
 
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
-  const token = getToken(authHeader)
-  const jwt: Jwt = decode(token, { complete: true }) as Jwt
+  const token = getToken(authHeader);
+
+  const jwt: Jwt = decode(token, { complete: true }) as Jwt;
+  // const jwtKid = jwt.header.kid;
+  /*const jwks = await Axios.get(jwksUrl);
+
+  const signingKey = jwks.data.keys.filter((k) => k.kid === jwtKid)[0];
+
+  if (!signingKey) {
+    throw new Error(`Unable to find a signing key that matches '${jwtKid}'`);
+  }
+
+  const { x5c } = signingKey;
+
+  const cert = `-----BEGIN CERTIFICATE-----\n${x5c[0]}\n-----END CERTIFICATE-----`;
+  if (!jwt) {
+    throw new Error("invalid token");
+  }
+  return verify(token, cert, { algorithms: ["RS256"] }) as JwtPayload;*/
   console.log(jwt)
   // TODO: Implement token verification
   // You should implement it similarly to how it was implemented for the exercise for the lesson 5
