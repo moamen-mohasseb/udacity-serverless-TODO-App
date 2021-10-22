@@ -17,7 +17,7 @@ export const handler = middy(
     if (todos.count !== 0)
     return {
       statusCode: 200,
-      body: JSON.stringify({ allItems: todos.Items }),
+      body: JSON.stringify({ items: todos }),
     }
 
   return {

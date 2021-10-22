@@ -37,8 +37,9 @@ export async function patchTodo(
 ): Promise<void> {
   await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
+     
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
+      'Authorization': `Bearer ${idToken}`     
     }
   })
 }
@@ -61,11 +62,15 @@ export async function getUploadUrl(
 ): Promise<string> {
   const response = await Axios.post(`${apiEndpoint}/todos/${todoId}/attachment`, '', {
     headers: {
+     
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
     }
   })
-  return response.data.uploadUrl
+ // console.log('received upload url: ' + JSON.stringify(response.data.uploadUrl))
+  //console.log("back",response.data)
+  return response.data.Url
+  
 }
 
 export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {

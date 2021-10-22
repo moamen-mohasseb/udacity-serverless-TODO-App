@@ -27,7 +27,6 @@ provider:
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
     ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-moamen-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    AUTH_SECRET: XcL0IzlUtC0XIEejflD2-rZHQIOFnK5AG9eGM9FBv1G9OstdWM10njqIuatRrJQj
   logs:
     # Enable API Gateway logs
     restApi: true
@@ -86,19 +85,7 @@ functions:
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
-    events:
-      - http:
-          method: patch
-          path: todos/{todoId}
-          cors: true
-    iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:UpdateItem
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
-
+ 
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -115,6 +102,24 @@ functions:
         - dynamodb:DeleteItem
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
+  UpdateTodo:
+    handler: src/lambda/http/updateTodo.handler
+    events:
+      - http:
+          method: patch
+          path: todos/{todoId}
+          cors: true
+          authorizer: Auth
+          request:
+            schema:
+              application/json:  ${file(models/update-todo-model.json)}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    
 
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -193,7 +198,7 @@ resources:
                 - POST
                 - DELETE
                 - HEAD
-              MaxAge: 5000
+              MaxAge: 3000
 
     # TODO: Complete the policy below and attach it to the bucket defined above
     # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"

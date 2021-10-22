@@ -84,8 +84,8 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
           [pos]: { done: { $set: !todo.done } }
         })
       })
-    } catch {
-      alert('Todo deletion failed')
+    } catch(error:any) {
+      alert(`Todo Update failed ${error.message}`)
     }
   }
 
@@ -100,7 +100,6 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       alert(`Failed to fetch todos: ${e.message}`)
     }
   }
-
   render() {
     return (
       <div>
@@ -192,7 +191,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {todo.attachmentUrl && (
+              { todo.attachmentUrl && (
                 <Image src={todo.attachmentUrl} size="small" wrapped />
               )}
               <Grid.Column width={16}>
