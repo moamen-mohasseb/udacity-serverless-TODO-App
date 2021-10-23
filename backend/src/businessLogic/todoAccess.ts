@@ -50,7 +50,7 @@ export default class TodoAccess {
 
 async  accessCreateAttachmentPresignedUrl(
     todoId: String,
-    userId: String
+    userId: String,
   ): Promise<string> {
     try{
       console.log(userId)
@@ -59,7 +59,26 @@ async  accessCreateAttachmentPresignedUrl(
         Key:todoId,
         Expires: 500
       });
-  console.log(attachmentUrl)
+      const params1 = {
+        TableName: this.Tabel_Name,
+        Key: 
+        {todoId: todoId,userId:userId },
+        UpdateExpression: "set attachmentUrl = :a"
+        ,
+        ExpressionAttributeValues: {
+          ':a':  `https://${this.s3_bucket}.s3.amazonaws.com/${todoId}`
+        },
+        ReturnValues: 'UPDATED_NEW'
+      }
+      await this.docClient.update(params1,function (err, data) {
+        if (err) {
+          console.log("ERRROR " + err);
+          throw new Error("Error " + err);
+        } else {
+          console.log("Element updated " + data);
+        }
+      }).promise()
+      console.log(attachmentUrl)
       return attachmentUrl;
     }
     catch(error){
@@ -92,17 +111,24 @@ async  accessCreateAttachmentPresignedUrl(
         todoId: todoId
       },
       ExpressionAttributeNames: {
-        '#todo_name': 'name',
+        '#name': 'name',
       },
       ExpressionAttributeValues: {
         ':name': updatedTodo.name,
         ':dueDate': updatedTodo.dueDate,
         ':done': updatedTodo.done,
       },
-      UpdateExpression: 'SET #todo_name = :name, dueDate = :dueDate, done = :done',
-      ReturnValues: 'ALL_NEW',
+      UpdateExpression: 'SET #name = :name, dueDate = :dueDate, done = :done',
+      ReturnValues: 'UPDATED_NEW',
     };
-    const result = await this.docClient.update(params).promise();
+    const result = await this.docClient.update(params,function (err, data) {
+      if (err) {
+        console.log("ERRROR " + err);
+        throw new Error("Error " + err);
+      } else {
+        console.log("Element updated " + data);
+      }
+    }).promise();
     console.log(`Update statement has completed without error`, result);
    //
   }

@@ -14,8 +14,9 @@ export const handler = middy(
     const userId = getUserId(event)
    // const imageId= v4()
    console.log(todoId,userId)
+   
     const attachmentUrl= await createAttachmentPresignedUrl(todoId, userId)
-
+    console.log(attachmentUrl)
     return {
       statusCode: 201,
       headers: {

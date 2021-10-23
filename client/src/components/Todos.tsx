@@ -14,7 +14,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
+import { createTodo, deleteTodo, getTodos, updateTodo } from '../api/todos-api'
 import Auth from '../auth/Auth'
 import { Todo } from '../types/Todo'
 
@@ -74,11 +74,17 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   onTodoCheck = async (pos: number) => {
     try {
       const todo = this.state.todos[pos]
-      await patchTodo(this.props.auth.getIdToken(), todo.todoId, {
+      console.log("todo obj",this.props.auth.getIdToken(), todo.todoId, {
         name: todo.name,
         dueDate: todo.dueDate,
         done: !todo.done
       })
+      await updateTodo(this.props.auth.getIdToken(), todo.todoId, {
+        name: todo.name,
+        dueDate: todo.dueDate,
+        done: !todo.done
+      })
+      console.log("after update")
       this.setState({
         todos: update(this.state.todos, {
           [pos]: { done: { $set: !todo.done } }
