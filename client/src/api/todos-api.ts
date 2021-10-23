@@ -36,14 +36,16 @@ export async function updateTodo(
   updatedTodo: UpdateTodoRequest
 ): Promise<void> {
   console.log(`${apiEndpoint}/todos/${todoId} :Obj: ${JSON.stringify(updatedTodo)}`)
-  await Axios.post(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
+  try{const result=await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`     
     }
   })
+  console.log(`result : ${result}`)
+}
+catch(error){console.log(`error : ${error}`)}
+
 }
 
 export async function deleteTodo(

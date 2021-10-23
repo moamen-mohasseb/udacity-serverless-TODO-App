@@ -29,6 +29,6 @@ export async function createAttachmentPresignedUrl(
 export async function updateTodo(  todoId: String,
     updatedTodo: UpdateTodoRequest,
     userId: String
-  ): Promise<void>{
-await acessobj.accessUpdateTodo(todoId,updatedTodo,userId)
+  ): Promise<any>{
+return await acessobj.accessUpdateTodo(todoId,updatedTodo,userId)
 }

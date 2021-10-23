@@ -101,10 +101,11 @@ async  accessCreateAttachmentPresignedUrl(
   return allItems.Items;
 }
  async  accessUpdateTodo(  todoId: String,
-    updatedTodo: UpdateTodoRequest,
+   updatedTodo: UpdateTodoRequest,
     userId: String
-  ): Promise<void>{
-    const params = {
+  ): Promise<any>{
+    try{
+       const params = {
       TableName: this.Tabel_Name,
       Key: {
         userId: userId,
@@ -123,6 +124,11 @@ async  accessCreateAttachmentPresignedUrl(
     };
     const result = await this.docClient.update(params).promise();
     console.log(`Update statement has completed without error`, result);
-   //
+    return result
+   }
+   catch(error){
+     console.log(`update error ${error}`)
+     return `update error ${error}`
+  }
   }
 }

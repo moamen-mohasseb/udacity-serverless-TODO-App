@@ -12,7 +12,7 @@ export const handler = middy(
     const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
     // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
     const userId = getUserId(event)
-    await updateTodo(todoId, updatedTodo, userId)
+    const result=await updateTodo(todoId, updatedTodo, userId)
      return {
       statusCode: 200,
       headers: {
@@ -21,7 +21,7 @@ export const handler = middy(
         'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PATCH',
         'Access-Control-Allow-Headers': 'Accept'
       },
-      body: JSON.stringify({updatedTodo})
+      body: JSON.stringify({result})
     }    
 
     }
