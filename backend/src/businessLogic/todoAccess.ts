@@ -49,24 +49,43 @@ export default class TodoAccess {
 }
 
 async  accessCreateAttachmentPresignedUrl(
-    todoId: String,
-    userId: String
-  ): Promise<string> {
-    try{
-      console.log(userId)
-    const attachmentUrl = await this.s3.getSignedUrl("putObject", {
-        Bucket:this.s3_bucket,
-        Key:todoId,
-        Expires: 500
-      });
-  console.log(attachmentUrl)
-      return attachmentUrl;
+  todoId: String,
+  userId: String,
+): Promise<string> {
+  try{
+    console.log(userId)
+  const attachmentUrl = await this.s3.getSignedUrl("putObject", {
+      Bucket:this.s3_bucket,
+      Key:todoId,
+      Expires: 500
+    });
+    const params1 = {
+      TableName: this.Tabel_Name,
+      Key: 
+      {todoId: todoId,userId:userId },
+      UpdateExpression: "set attachmentUrl = :a"
+      ,
+      ExpressionAttributeValues: {
+        ':a':  `https://${this.s3_bucket}.s3.amazonaws.com/${todoId}`
+      },
+      ReturnValues: 'UPDATED_NEW'
     }
-    catch(error){
-      console.log(error)
-      return `${error}  error attachment url`
-    }
+    await this.docClient.update(params1,function (err, data) {
+      if (err) {
+        console.log("ERRROR " + err);
+        throw new Error("Error " + err);
+      } else {
+        console.log("Element updated " + data);
+      }
+    }).promise()
+    console.log(attachmentUrl)
+    return attachmentUrl;
   }
+  catch(error){
+    console.log(error)
+    return `${error}  error attachment url`
+  }
+}
   async  accessGetTodosForUser(userId):Promise<any>{
     const allItems =await this.docClient
     .query({

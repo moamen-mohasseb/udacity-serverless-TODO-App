@@ -13,14 +13,14 @@ export const handler = middy(
     const newTodo: CreateTodoRequest = JSON.parse(event.body)
     const todoId = v4()
     const userid=getUserId(event)
-    const s3_bucket = process.env.ATTACHMENT_S3_BUCKET
+    //const s3_bucket = process.env.ATTACHMENT_S3_BUCKET
 
     // TODO: Implement creating a new TODO item
     const newItem = {
       todoId: todoId,
         userId: userid,
-        done: false,
-        attachmentUrl: `https://${s3_bucket}.s3.amazonaws.com/${todoId}`,
+      //  done: false,
+    //    attachmentUrl: `https://${s3_bucket}.s3.amazonaws.com/${todoId}`,
         ...newTodo
     }
     console.log("newItem: ",newItem)
